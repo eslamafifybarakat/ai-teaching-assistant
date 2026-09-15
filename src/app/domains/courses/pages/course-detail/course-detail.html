@@ -1,0 +1,88 @@
+@if (course(); as c) {
+  <div class="page-header">
+    <div class="course-title-row">
+      <span class="course-title-row__icon" [style.background]="c.color + '1a'" [style.color]="c.color">{{ c.icon }}</span>
+      <div>
+        <h1 class="page-header__title">{{ c.name }}</h1>
+        <p class="page-header__subtitle">{{ c.stage }} · {{ c.term }}</p>
+      </div>
+    </div>
+    <div class="page-header__actions">
+      <app-button variant="secondary">{{ 'common.settings' | translate }}</app-button>
+      <app-button variant="primary" (pressed)="newLecture()">+ {{ 'nav.createLecture' | translate }}</app-button>
+    </div>
+  </div>
+
+  <app-tabs [tabs]="tabs()" [activeId]="activeTab()" (changed)="activeTab.set($event)"></app-tabs>
+
+  <div class="tab-content">
+    @switch (activeTab()) {
+      @case ('overview') {
+        <div class="grid-3">
+          <app-card><div class="ov-stat"><span>👥</span><strong>{{ c.studentsCount }}</strong><small>{{ 'courses.students' | translate }}</small></div></app-card>
+          <app-card><div class="ov-stat"><span>🗓️</span><strong>{{ c.lecturesCount }}</strong><small>{{ 'courses.lectures' | translate }}</small></div></app-card>
+          <app-card><div class="ov-stat"><span>🎯</span><strong>{{ c.avgScore }}%</strong><small>{{ 'courses.avgScore' | translate }}</small></div></app-card>
+        </div>
+        <app-card style="margin-top: var(--space-5)">
+          <h3 style="margin-bottom: var(--space-3)">{{ c.description }}</h3>
+          <p class="text-muted">{{ 'courses.lastUpdated' | translate }}: {{ c.updatedAt }}</p>
+        </app-card>
+      }
+      @case ('lectures') {
+        <div class="stack-4">
+          @for (lec of lectures(); track lec.id) {
+            <app-card [interactive]="true" (click)="goToLecture(lec.id)">
+              <div class="lec-item">
+                <div>
+                  <strong>{{ lec.title }}</strong>
+                  <div class="chip-row" style="margin-top:6px">
+                    <app-badge [tone]="toneForStatus(lec.status)">{{ ('common.' + lec.status) | translate }}</app-badge>
+                    <span class="text-muted">{{ lec.durationMin }} {{ 'common.minutes' | translate }}</span>
+                  </div>
+                </div>
+                @if (lec.avgScore) { <strong class="lec-item__score">{{ lec.avgScore }}%</strong> }
+              </div>
+            </app-card>
+          }
+        </div>
+      }
+      @case ('students') {
+        <app-card [padded]="false">
+          <div class="student-table">
+            @for (s of students; track s.id) {
+              <div class="student-row">
+                <app-avatar [initials]="s.name.charAt(0)" [color]="s.avatarColor" size="sm"></app-avatar>
+                <span class="student-row__name">{{ s.name }}</span>
+                <span class="text-muted student-row__id">{{ s.studentNumber }}</span>
+                <div class="student-row__progress"><app-progress-bar [value]="s.overallScore" [showLabel]="true" [tone]="s.overallScore < 60 ? 'danger' : 'success'"></app-progress-bar></div>
+                <div class="chip-row">
+                  @for (b of s.badges; track b) { <app-badge tone="accent">{{ b }}</app-badge> }
+                </div>
+              </div>
+            }
+          </div>
+        </app-card>
+      }
+      @case ('materials') {
+        <app-card>
+          <div class="material-row"><span>📄</span><strong>Normalization-Chapter5.pdf</strong><span class="text-muted">2.4MB</span></div>
+          <div class="material-row"><span>📊</span><strong>ERD-Slides-v2.pptx</strong><span class="text-muted">5.1MB</span></div>
+          <div class="material-row"><span>📄</span><strong>SQL-Joins-Handout.docx</strong><span class="text-muted">840KB</span></div>
+        </app-card>
+      }
+      @case ('analytics') {
+        <app-card>
+          <h3 style="margin-bottom: var(--space-4)">{{ 'analytics.knowledgeMap' | translate }}</h3>
+          <app-bar-chart [data]="weakConcepts.map(w => ({ label: w.concept, value: w.score, tone: w.score < 60 ? 'var(--color-danger-500)' : (w.score < 80 ? 'var(--color-warning-500)' : 'var(--color-success-500)') }))"></app-bar-chart>
+        </app-card>
+      }
+      @case ('questionBank') {
+        <app-card>
+          <p class="text-muted">{{ 'questionBank.subtitle' | translate }}</p>
+        </app-card>
+      }
+    }
+  </div>
+} @else {
+  <app-card><p>Course not found.</p></app-card>
+}

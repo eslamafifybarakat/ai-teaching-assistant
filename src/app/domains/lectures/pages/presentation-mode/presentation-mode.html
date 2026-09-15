@@ -1,0 +1,43 @@
+<div class="present">
+  <header class="present__topbar">
+    <button type="button" class="present__exit" (click)="exit()">✕ {{ 'presentation.exit' | translate }}</button>
+    <span class="present__counter">{{ 'presentation.slideOf' | translate:{ current: index() + 1, total: total() } }}</span>
+    <div class="present__timer">
+      <span>⏱ {{ formattedTime() }}</span>
+      <button type="button" class="icon-btn-light" (click)="toggleTimer()">{{ timerRunning() ? '⏸' : '▶' }}</button>
+      <button type="button" class="icon-btn-light" (click)="resetTimer()">↺</button>
+    </div>
+  </header>
+
+  <main class="present__stage">
+    @if (slide(); as s) {
+      <div class="present__slide">
+        <h1>{{ s.title }}</h1>
+        <p>{{ s.content }}</p>
+      </div>
+    }
+
+    <button type="button" class="present__nav present__nav--prev" (click)="prev()" [disabled]="index() === 0" [attr.aria-label]="'presentation.previous' | translate">‹</button>
+    <button type="button" class="present__nav present__nav--next" (click)="next()" [disabled]="index() === total() - 1" [attr.aria-label]="'presentation.nextSlide' | translate">›</button>
+  </main>
+
+  @if (showNotes() && slide()) {
+    <div class="present__notes">
+      <strong>📝 {{ 'presentation.speakerNotes' | translate }}</strong>
+      <p>{{ slide()!.speakerNotes }}</p>
+    </div>
+  }
+
+  <footer class="present__toolbar">
+    <button type="button" class="present__tool" (click)="showNotes.set(!showNotes())">📝 {{ 'presentation.speakerNotes' | translate }}</button>
+    <button type="button" class="present__tool" (click)="flash('askAi')">🤖 {{ 'presentation.askAi' | translate }}</button>
+    <button type="button" class="present__tool present__tool--accent" (click)="generateQuestion()">🧠 {{ 'presentation.generateQuestion' | translate }}</button>
+    <button type="button" class="present__tool" (click)="flash('video')">🎥 {{ 'presentation.showVideo' | translate }}</button>
+    <button type="button" class="present__tool" (click)="flash('example')">💡 {{ 'presentation.showExample' | translate }}</button>
+    <button type="button" class="present__tool" (click)="flash('results')">📊 {{ 'presentation.showResults' | translate }}</button>
+  </footer>
+
+  @if (toastMsg()) {
+    <div class="present__flash">{{ toastMsg() }}</div>
+  }
+</div>

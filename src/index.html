@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>مساعد التدريس الذكي | AI Teaching Assistant</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Plan lectures, run live quizzes, and track how every student is doing.">
+  <!-- Default matches --color-bg in src/styles.scss; the inline script below
+       swaps it to the dark value when the stored preference is dark. Changing
+       either palette value means changing it in all three places — see the
+       three-way-sync note in README §16. -->
+  <meta name="theme-color" content="#f6f7fb">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="mask-icon" href="mask-icon.svg" color="#3c4bc4">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    // No-flash theme + language bootstrap: ThemeService and I18nService both
+    // read these same localStorage keys, but they only run once Angular has
+    // booted — by then the first paint has already happened with the wrong
+    // theme/direction. Applying the stored preference here, before any CSS
+    // is parsed, is what keeps a repeat visit from flashing.
+    (function () {
+      try {
+        var theme = localStorage.getItem('ata_theme');
+        if (theme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', '#0f1120');
+        }
+        var lang = localStorage.getItem('ata_lang');
+        if (lang) {
+          document.documentElement.lang = lang;
+          document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        }
+      } catch (e) {
+        // Private mode / blocked storage — fall through to the document defaults.
+      }
+    })();
+  </script>
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

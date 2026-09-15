@@ -1,0 +1,75 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-header__title">{{ 'reports.title' | translate }}</h1>
+  </div>
+  <div class="page-header__actions">
+    <app-button variant="secondary" [loading]="exporting()" (pressed)="exportFile('PDF')">📄 {{ 'reports.downloadPdf' | translate }}</app-button>
+    <app-button variant="secondary" [loading]="exporting()" (pressed)="exportFile('PowerPoint')">📊 {{ 'reports.downloadPptx' | translate }}</app-button>
+    <app-button variant="primary" (pressed)="exportFile('Print')">🖨️ {{ 'reports.printReport' | translate }}</app-button>
+  </div>
+</div>
+
+<app-tabs [tabs]="tabs()" [activeId]="activeTab()" (changed)="activeTab.set($event)"></app-tabs>
+
+<div class="tab-content">
+  @if (activeTab() === 'lecture') {
+    <app-card>
+      <div class="report-head">
+        <div>
+          <h2>{{ 'wizard.lectureTitlePlaceholder' | translate }}</h2>
+          <p class="text-muted">{{ 'reports.lectureSubtitleExample' | translate }}</p>
+        </div>
+        <app-badge tone="success">{{ 'common.published' | translate }}</app-badge>
+      </div>
+
+      <div class="grid-3" style="margin: var(--space-6) 0">
+        <div class="report-stat"><strong>74%</strong><span>{{ 'reports.averageScore' | translate }}</span></div>
+        <div class="report-stat"><strong>91%</strong><span>{{ 'reports.participation' | translate }}</span></div>
+        <div class="report-stat"><strong>18</strong><span>{{ 'common.students' | translate }}</span></div>
+      </div>
+
+      <app-bar-chart [data]="weakConcepts"></app-bar-chart>
+
+      <div class="grid-2" style="margin-top: var(--space-6)">
+        <div>
+          <h4 style="margin-bottom: var(--space-3)">✅ {{ 'reports.strongTopics' | translate }}</h4>
+          <ul class="report-list">
+            <li>1NF — 92%</li>
+            <li>{{ 'reports.strongTopicsItem2' | translate }}</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="margin-bottom: var(--space-3)">⚠️ {{ 'reports.weakTopics' | translate }}</h4>
+          <ul class="report-list">
+            <li>3NF — 64%</li>
+            <li>BCNF — 48%</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="report-recommendation">
+        <strong>💡 {{ 'reports.recommendation' | translate }}</strong>
+        <p>{{ 'reports.recommendationText' | translate }}</p>
+      </div>
+    </app-card>
+  }
+
+  @if (activeTab() === 'quiz') {
+    <app-card>
+      <p class="text-muted">{{ 'reports.quizReportHint' | translate }}</p>
+      <app-bar-chart style="margin-top: var(--space-5); display:block" [data]="[{label:'سؤال 1 (1NF)', value: 82}, {label:'سؤال 2 (2NF)', value: 68}, {label:'سؤال 3 (3NF)', value: 54}]"></app-bar-chart>
+    </app-card>
+  }
+
+  @if (activeTab() === 'student') {
+    <app-card>
+      <p class="text-muted">{{ 'reports.studentReportHint' | translate }}</p>
+    </app-card>
+  }
+
+  @if (activeTab() === 'course') {
+    <app-card>
+      <p class="text-muted">{{ 'reports.courseReportHint' | translate }}</p>
+    </app-card>
+  }
+</div>

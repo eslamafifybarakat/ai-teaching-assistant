@@ -1,0 +1,134 @@
+<div class="login">
+  <div class="login__topbar">
+    <div class="login__brand">
+      <span class="login__logo">🎓</span>
+      <span>{{ 'common.appName' | translate }}</span>
+    </div>
+    <div class="login__topbar-actions">
+      <app-language-switcher></app-language-switcher>
+      <app-theme-toggle></app-theme-toggle>
+    </div>
+  </div>
+
+  <main class="login__grid">
+    <section class="login__hero">
+      <div class="login__hero-card">
+        <span class="login__hero-badge">✨ {{ 'common.new' | translate }}</span>
+        <h1 class="login__hero-title">{{ 'auth.heroTitle' | translate }}</h1>
+        <p class="login__hero-sub">{{ 'auth.heroSubtitle' | translate }}</p>
+        <div class="login__hero-stats">
+          <div><strong>+120</strong><span>{{ 'auth.heroStat1' | translate }}</span></div>
+          <div><strong>91%</strong><span>{{ 'auth.heroStat2' | translate }}</span></div>
+          <div><strong>6</strong><span>{{ 'auth.heroStat3' | translate }}</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="login__panel">
+      @if (mode() === 'signin') {
+        <div class="login__form-wrap">
+          <h2 class="login__title">{{ 'auth.welcomeTitle' | translate }}</h2>
+          <p class="login__subtitle">{{ 'auth.welcomeSubtitle' | translate }}</p>
+
+          <form class="login__form" (ngSubmit)="submit()">
+            <label class="field">
+              <span class="field__label">{{ 'auth.email' | translate }}</span>
+              <input
+                class="field__input"
+                type="email"
+                name="email"
+                autocomplete="email"
+                [ngModel]="email()"
+                (ngModelChange)="email.set($event)"
+                placeholder="professor@demo.edu" />
+            </label>
+            <label class="field">
+              <span class="field__label">{{ 'auth.password' | translate }}</span>
+              <input
+                class="field__input"
+                type="password"
+                name="password"
+                autocomplete="current-password"
+                [ngModel]="password()"
+                (ngModelChange)="password.set($event)"
+                placeholder="••••••••" />
+            </label>
+
+            @if (errorMsg()) {
+              <p class="login__error">{{ errorMsg() | translate }}</p>
+            }
+
+            <div class="login__row">
+              <label class="checkbox">
+                <input type="checkbox" [ngModel]="rememberMe()" (ngModelChange)="rememberMe.set($event)" name="remember" />
+                <span>{{ 'auth.rememberMe' | translate }}</span>
+              </label>
+              <button type="button" class="link-btn" (click)="goReset()">{{ 'auth.forgotPassword' | translate }}</button>
+            </div>
+
+            <app-button type="submit" [fullWidth]="true" size="lg" [loading]="loading()" [disabled]="!canSubmit()">
+              {{ (loading() ? 'auth.signingIn' : 'auth.signIn') | translate }}
+            </app-button>
+          </form>
+
+          <div class="login__divider"><span>{{ 'auth.orDivider' | translate }}</span></div>
+
+          <div class="login__demo">
+            <p class="login__demo-title">{{ 'auth.demoAccounts' | translate }}</p>
+            <p class="login__demo-hint">{{ 'auth.demoHint' | translate }}</p>
+            <div class="login__demo-grid">
+              @for (account of demoAccounts; track account.id) {
+                <button type="button" class="demo-card" (click)="loginAsDemo(account)">
+                  <app-avatar [initials]="account.avatarInitials" [color]="account.avatarColor" size="md"></app-avatar>
+                  <span class="demo-card__body">
+                    <strong>{{ account.name }}</strong>
+                    <small>{{ roleLabelKey(account.role) | translate }} · {{ account.email }}</small>
+                  </span>
+                </button>
+              }
+            </div>
+          </div>
+
+          <a class="login__student-link" routerLink="/student/join">{{ 'auth.studentQuickJoin' | translate }} →</a>
+        </div>
+      } @else {
+        <div class="login__form-wrap">
+          <h2 class="login__title">{{ 'auth.resetPasswordTitle' | translate }}</h2>
+          <p class="login__subtitle">{{ 'auth.resetPasswordSubtitle' | translate }}</p>
+
+          @if (!resetSent()) {
+            <form class="login__form" (ngSubmit)="sendReset()">
+              <label class="field">
+                <span class="field__label">{{ 'auth.email' | translate }}</span>
+                <input class="field__input" type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" name="resetEmail" placeholder="professor@demo.edu" />
+              </label>
+              <app-button type="submit" [fullWidth]="true" size="lg">{{ 'auth.sendResetLink' | translate }}</app-button>
+            </form>
+          } @else {
+            <p class="login__success">✅ {{ 'auth.resetLinkSent' | translate }}</p>
+          }
+
+          <button type="button" class="link-btn login__back" (click)="goSignIn()">← {{ 'auth.backToLogin' | translate }}</button>
+        </div>
+      }
+    </section>
+  </main>
+</div>
+
+<app-modal [open]="stagePickerOpen()" [title]="'auth.selectStage' | translate" size="sm" (closed)="stagePickerOpen.set(false)">
+  <p class="stage-hint">{{ 'auth.stageHint' | translate }}</p>
+  <div class="stage-grid">
+    <button type="button" class="stage-card" (click)="pickStage('primary')">
+      <span class="stage-card__icon">🎒</span>
+      <span>{{ 'auth.stagePrimary' | translate }}</span>
+    </button>
+    <button type="button" class="stage-card" (click)="pickStage('middle')">
+      <span class="stage-card__icon">📘</span>
+      <span>{{ 'auth.stageMiddle' | translate }}</span>
+    </button>
+    <button type="button" class="stage-card" (click)="pickStage('secondary')">
+      <span class="stage-card__icon">🎓</span>
+      <span>{{ 'auth.stageSecondary' | translate }}</span>
+    </button>
+  </div>
+</app-modal>

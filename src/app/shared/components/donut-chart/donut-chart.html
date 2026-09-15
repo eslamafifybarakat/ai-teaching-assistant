@@ -1,0 +1,17 @@
+<div class="donut" [style.width.px]="size()" [style.height.px]="size()">
+  <svg [attr.viewBox]="'0 0 ' + size() + ' ' + size()">
+    <circle
+      [attr.cx]="size()/2" [attr.cy]="size()/2" [attr.r]="radius()"
+      fill="none" stroke="var(--color-surface-alt)" [attr.stroke-width]="strokeWidth()" />
+    @for (arc of arcs(); track arc.label) {
+      <circle
+        [attr.cx]="size()/2" [attr.cy]="size()/2" [attr.r]="radius()"
+        fill="none" [attr.stroke]="arc.color" [attr.stroke-width]="strokeWidth()"
+        [attr.stroke-dasharray]="arc.dashArray"
+        [attr.stroke-dashoffset]="arc.dashOffset"
+        stroke-linecap="round"
+        transform-origin="center"
+        [attr.transform]="'rotate(-90 ' + size()/2 + ' ' + size()/2 + ')'" />
+    }
+  </svg>
+</div>

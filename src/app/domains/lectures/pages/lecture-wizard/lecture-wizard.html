@@ -1,0 +1,188 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-header__title">{{ 'wizard.title' | translate }}</h1>
+  </div>
+</div>
+
+<div class="wizard-steps">
+  @for (step of steps; track step; let i = $index) {
+    <div class="wizard-steps__item" [class.wizard-steps__item--active]="i === currentStepIndex()" [class.wizard-steps__item--done]="i < currentStepIndex()">
+      <span class="wizard-steps__dot">{{ i < currentStepIndex() ? '✓' : i + 1 }}</span>
+      <span class="wizard-steps__label">{{ stepKeys[step] | translate }}</span>
+    </div>
+  }
+</div>
+
+<app-card>
+  @switch (currentStep()) {
+
+    @case ('basics') {
+      <h3 class="wizard-card-title">{{ 'wizard.basicsTitle' | translate }}</h3>
+      <div class="stack-4 wizard-form">
+        <label class="field">
+          <span class="field__label">{{ 'wizard.lectureTitle' | translate }}</span>
+          <input class="field__input" type="text" [value]="lectureTitle()" (input)="lectureTitle.set($any($event.target).value)" [placeholder]="'wizard.lectureTitlePlaceholder' | translate" />
+        </label>
+        <div class="grid-2">
+          <label class="field">
+            <span class="field__label">{{ 'wizard.audience' | translate }}</span>
+            <input class="field__input" type="text" [value]="audience()" (input)="audience.set($any($event.target).value)" />
+          </label>
+          <label class="field">
+            <span class="field__label">{{ 'wizard.duration' | translate }}</span>
+            <input class="field__input" type="number" [value]="duration()" (input)="duration.set($any($event.target).valueAsNumber)" />
+          </label>
+        </div>
+        <!-- A chip-button group, not a single control — labelled as a group
+             rather than with a <label> that could only name one of them. -->
+        <div class="field" role="group" [attr.aria-label]="'wizard.level' | translate">
+          <span class="field__label">{{ 'wizard.level' | translate }}</span>
+          <div class="chip-row">
+            <button type="button" class="chip" [class.chip--active]="level() === 'levelBeginner'" (click)="level.set('levelBeginner')">{{ 'wizard.levelBeginner' | translate }}</button>
+            <button type="button" class="chip" [class.chip--active]="level() === 'levelIntermediate'" (click)="level.set('levelIntermediate')">{{ 'wizard.levelIntermediate' | translate }}</button>
+            <button type="button" class="chip" [class.chip--active]="level() === 'levelAdvanced'" (click)="level.set('levelAdvanced')">{{ 'wizard.levelAdvanced' | translate }}</button>
+          </div>
+        </div>
+      </div>
+    }
+
+    @case ('upload') {
+      <h3 class="wizard-card-title">{{ 'wizard.uploadTitle' | translate }}</h3>
+      <p class="text-muted" style="margin-bottom: var(--space-5)">{{ 'wizard.uploadHint' | translate }}</p>
+
+      @if (!fileName()) {
+        <div
+          class="dropzone"
+          [class.dropzone--active]="isDragging()"
+          (dragover)="$event.preventDefault(); isDragging.set(true)"
+          (dragleave)="isDragging.set(false)"
+          (drop)="onDrop($event)">
+          <span class="dropzone__icon">📄</span>
+          <p>{{ 'wizard.dropHere' | translate }}</p>
+          <app-button variant="secondary" (pressed)="simulateUpload('Database-Normalization-Chapter5.pdf')">{{ 'wizard.browseFiles' | translate }}</app-button>
+        </div>
+      } @else {
+        <div class="uploaded-file">
+          <span>📄</span>
+          <div class="uploaded-file__info">
+            <strong>{{ fileName() }}</strong>
+            <small class="text-muted">{{ 'wizard.fileUploaded' | translate }} — 2.4MB</small>
+          </div>
+          <button type="button" class="link-btn" (click)="removeFile()">{{ 'wizard.removeFile' | translate }}</button>
+        </div>
+      }
+
+      <div class="wizard-divider"><span>{{ 'common.optional' | translate }}</span></div>
+      <label class="field">
+        <span class="field__label">{{ 'wizard.orWriteTopic' | translate }}</span>
+        <textarea class="field__textarea" [value]="manualTopic()" (input)="manualTopic.set($any($event.target).value)"></textarea>
+      </label>
+    }
+
+    @case ('analysis') {
+      @if (!analyzed() && !analyzing()) {
+        <div class="analysis-intro">
+          <span class="analysis-intro__icon">🤖</span>
+          <h3>{{ 'wizard.analyzeNow' | translate }}</h3>
+          <app-button variant="primary" size="lg" (pressed)="startAnalysis()">✨ {{ 'wizard.analyzeNow' | translate }}</app-button>
+        </div>
+      }
+      @if (analyzing()) {
+        <div class="analysis-loading">
+          <div class="analysis-loading__spinner"></div>
+          <h3>{{ 'wizard.analyzingTitle' | translate }}</h3>
+          <p class="text-muted">{{ 'wizard.analyzingHint' | translate }}</p>
+        </div>
+      }
+      @if (analyzed()) {
+        <h3 class="wizard-card-title">{{ 'wizard.detectedTopics' | translate }} <app-ai-badge></app-ai-badge></h3>
+        <div class="stack-4" style="margin-top: var(--space-4)">
+          @for (topic of detectedTopics(); track topic.id) {
+            <label class="topic-row">
+              <input type="checkbox" [checked]="topic.included" (change)="toggleTopic(topic.id)" />
+              <span [class.topic-row__excluded]="!topic.included">{{ topic.label }}</span>
+              <app-badge [tone]="topic.included ? 'success' : 'neutral'">{{ (topic.included ? 'wizard.include' : 'wizard.excluded') | translate }}</app-badge>
+            </label>
+          }
+        </div>
+      }
+    }
+
+    @case ('objectives') {
+      <h3 class="wizard-card-title">{{ 'wizard.objectivesTitle' | translate }} <app-ai-badge></app-ai-badge></h3>
+      <p class="text-muted" style="margin-bottom: var(--space-4)">{{ 'wizard.objectivesHint' | translate }}</p>
+      <div class="stack-4">
+        @for (obj of objectives(); track $index) {
+          <div class="objective-row">
+            <span>🎯</span>
+            <span class="objective-row__text">{{ obj }}</span>
+            <button type="button" class="link-btn" (click)="removeObjective($index)">{{ 'common.remove' | translate }}</button>
+          </div>
+        }
+        <div class="objective-add">
+          <input class="field__input" type="text" [value]="newObjective()" (input)="newObjective.set($any($event.target).value)" [placeholder]="'wizard.objectivesPlaceholder' | translate" (keydown.enter)="addObjective()" />
+          <app-button variant="secondary" (pressed)="addObjective()">+ {{ 'wizard.addObjective' | translate }}</app-button>
+        </div>
+      </div>
+    }
+
+    @case ('plan') {
+      <h3 class="wizard-card-title">{{ 'wizard.planTitle' | translate }} <span class="text-muted" style="font-weight:400; font-size: var(--fs-caption)">({{ totalMinutes() }} {{ 'wizard.minutesShort' | translate }})</span></h3>
+      <p class="text-muted" style="margin-bottom: var(--space-4)">{{ 'wizard.planHint' | translate }}</p>
+      <div class="stack-4">
+        @for (item of plan(); track item.id; let i = $index) {
+          <div class="plan-row">
+            <span class="plan-row__order">{{ i + 1 }}</span>
+            <span class="plan-row__label">{{ item.label }}</span>
+            <span class="plan-row__mins">{{ item.minutes }} {{ 'wizard.minutesShort' | translate }}</span>
+            <div class="plan-row__actions">
+              <button type="button" class="icon-btn" (click)="movePlanItem(i, -1)" [disabled]="i === 0">↑</button>
+              <button type="button" class="icon-btn" (click)="movePlanItem(i, 1)" [disabled]="i === plan().length - 1">↓</button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    @case ('slides') {
+      @if (!slidesReady() && !generatingSlides()) {
+        <div class="analysis-intro">
+          <span class="analysis-intro__icon">🖼️</span>
+          <h3>{{ 'wizard.slidesTitle' | translate }}</h3>
+          <app-button variant="primary" size="lg" (pressed)="generateSlides()">✨ {{ 'common.generate' | translate }}</app-button>
+        </div>
+      }
+      @if (generatingSlides()) {
+        <div class="analysis-loading">
+          <div class="analysis-loading__spinner"></div>
+          <h3>{{ 'wizard.slidesTitle' | translate }}</h3>
+          <p class="text-muted">{{ 'wizard.slidesHint' | translate }}</p>
+        </div>
+      }
+      @if (slidesReady()) {
+        <h3 class="wizard-card-title">✅ {{ 'wizard.slidesTitle' | translate }}</h3>
+        <div class="slide-grid">
+          @for (i of [1,2,3,4,5,6,7,8]; track i) {
+            <div class="slide-thumb">
+              <span class="slide-thumb__num">{{ i }}</span>
+              <app-ai-badge></app-ai-badge>
+            </div>
+          }
+        </div>
+        <app-button variant="primary" size="lg" [fullWidth]="true" (pressed)="finish()" style="margin-top: var(--space-6)">{{ 'wizard.finish' | translate }}</app-button>
+      }
+    }
+  }
+</app-card>
+
+@if (currentStep() !== 'slides') {
+  <div class="wizard-nav">
+    <app-button variant="ghost" (pressed)="back()" [disabled]="currentStepIndex() === 0">← {{ 'common.back' | translate }}</app-button>
+    <app-button
+      variant="primary"
+      (pressed)="next()"
+      [disabled]="(currentStep() === 'analysis' && !analyzed())">
+      {{ 'common.next' | translate }} →
+    </app-button>
+  </div>
+}

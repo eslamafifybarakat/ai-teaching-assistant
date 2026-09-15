@@ -1,0 +1,29 @@
+@if (open()) {
+  <div class="modal-backdrop">
+    <!-- The click-outside-to-close veil is a real <button> positioned behind
+         the dialog as a SIBLING, not a parent: siblings don't bubble to each
+         other, so clicking inside the dialog never reaches this handler and
+         no $event.stopPropagation() workaround is needed. A plain <div> here
+         would also fail click-events-have-key-events / interactive-supports-
+         focus — a native button is keyboard-operable by construction. -->
+    <button
+      type="button"
+      class="modal-backdrop__veil"
+      aria-label="Close"
+      (click)="onBackdrop()"></button>
+    <div
+      class="modal"
+      [class]="'modal--' + size()"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="title()">
+      <header class="modal__header">
+        <h3 class="modal__title">{{ title() }}</h3>
+        <button type="button" class="modal__close" (click)="closed.emit()" aria-label="Close">✕</button>
+      </header>
+      <div class="modal__body">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+}

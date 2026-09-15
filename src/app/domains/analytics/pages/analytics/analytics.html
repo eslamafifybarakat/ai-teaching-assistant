@@ -1,0 +1,67 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-header__title">{{ 'analytics.title' | translate }}</h1>
+    <p class="page-header__subtitle">{{ 'analytics.subtitle' | translate }}</p>
+  </div>
+  <div class="page-header__actions chip-row">
+    <button type="button" class="chip" [class.chip--active]="range() === 'last7'" (click)="range.set('last7')">{{ 'analytics.last7' | translate }}</button>
+    <button type="button" class="chip" [class.chip--active]="range() === 'last30'" (click)="range.set('last30')">{{ 'analytics.last30' | translate }}</button>
+    <button type="button" class="chip" [class.chip--active]="range() === 'thisTerm'" (click)="range.set('thisTerm')">{{ 'analytics.thisTerm' | translate }}</button>
+  </div>
+</div>
+
+<div class="grid-4" style="margin-bottom: var(--space-6)">
+  <app-stat-card icon="🎯" [label]="'reports.averageScore' | translate" value="76%" tint="#4f5fd6" trend="+3%" [trendPositive]="true"></app-stat-card>
+  <app-stat-card icon="📈" [label]="'analytics.lectureEngagement' | translate" value="88%" tint="#10b981"></app-stat-card>
+  <app-stat-card icon="🗓️" [label]="'analytics.attendance' | translate" value="88%" tint="#f59e0b"></app-stat-card>
+  <app-stat-card icon="🧠" [label]="'analytics.quizStatistics' | translate" value="24" tint="#8b5cf6"></app-stat-card>
+</div>
+
+<div class="analytics-grid">
+  <app-card>
+    <h3 style="margin-bottom: var(--space-4)">{{ 'analytics.knowledgeMap' | translate }}</h3>
+    <app-bar-chart [data]="weakConcepts"></app-bar-chart>
+  </app-card>
+
+  <app-card>
+    <h3 style="margin-bottom: var(--space-4)">{{ 'analytics.attendance' | translate }}</h3>
+    <div class="donut-row">
+      <app-donut-chart [segments]="attendanceSegments" [size]="130"></app-donut-chart>
+      <div class="donut-legend">
+        @for (seg of attendanceSegments; track seg.label) {
+          <div class="donut-legend__row"><span class="donut-legend__dot" [style.background]="seg.color"></span>{{ seg.label }} — {{ seg.value }}%</div>
+        }
+      </div>
+    </div>
+  </app-card>
+
+  <app-card>
+    <h3 style="margin-bottom: var(--space-4)">{{ 'analytics.lectureEngagement' | translate }}</h3>
+    <app-bar-chart [data]="lecturesEngagement"></app-bar-chart>
+  </app-card>
+
+  <app-card>
+    <h3 style="margin-bottom: var(--space-4)">{{ 'quiz.questionType' | translate }}</h3>
+    <div class="donut-row">
+      <app-donut-chart [segments]="questionTypeSegments" [size]="130"></app-donut-chart>
+      <div class="donut-legend">
+        @for (seg of questionTypeSegments; track seg.label) {
+          <div class="donut-legend__row"><span class="donut-legend__dot" [style.background]="seg.color"></span>{{ seg.label }} — {{ seg.value }}%</div>
+        }
+      </div>
+    </div>
+  </app-card>
+
+  <app-card class="analytics-grid__wide">
+    <h3 style="margin-bottom: var(--space-4)">{{ 'analytics.studentPerformance' | translate }}</h3>
+    <div class="top-students">
+      @for (s of topStudents; track s.id; let i = $index) {
+        <div class="top-students__row">
+          <span class="top-students__rank">#{{ i + 1 }}</span>
+          <span class="top-students__name">{{ s.name }}</span>
+          <span class="top-students__score">{{ s.overallScore }}%</span>
+        </div>
+      }
+    </div>
+  </app-card>
+</div>

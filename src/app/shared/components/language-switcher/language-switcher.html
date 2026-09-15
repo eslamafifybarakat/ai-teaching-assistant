@@ -1,0 +1,16 @@
+<app-dropdown-menu align="end">
+  <button trigger type="button" class="lang-trigger" [attr.aria-label]="'common.language' | translate">
+    <span>{{ i18n.currentDef().flag }}</span>
+    <span class="lang-trigger__name">{{ i18n.currentDef().nativeName }}</span>
+  </button>
+  @for (lang of languages; track lang.code) {
+    <button
+      type="button"
+      class="dropdown-item"
+      [class.dropdown-item--active]="lang.code === i18n.currentLang()"
+      (click)="choose(lang.code)">
+      <span>{{ lang.flag }}</span>
+      <span>{{ lang.nativeName }}</span>
+    </button>
+  }
+</app-dropdown-menu>

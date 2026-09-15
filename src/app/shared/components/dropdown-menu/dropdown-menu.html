@@ -1,0 +1,17 @@
+<div class="dropdown">
+  <!-- The trigger this wrapper catches the bubbled click from is ALWAYS a
+       native <button> supplied by the consumer via [trigger] (see
+       shell.html and language-switcher.html), so the control is already
+       keyboard-operable. Making this wrapper a <button> too would nest one
+       button inside another — invalid HTML, and worse for a screen reader
+       than the rule it would silence. -->
+  <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+  <div class="dropdown__trigger" (click)="toggle()">
+    <ng-content select="[trigger]"></ng-content>
+  </div>
+  @if (isOpen()) {
+    <div class="dropdown__menu" [class]="'dropdown__menu--' + align()">
+      <ng-content></ng-content>
+    </div>
+  }
+</div>

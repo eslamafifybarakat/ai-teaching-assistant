@@ -1,0 +1,18 @@
+.squiz { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: var(--space-6); background: var(--color-bg); }
+.squiz__center { text-align: center; max-width: 420px; }
+.squiz__pulse { font-size: 56px; margin-bottom: var(--space-5); animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+.squiz__question { width: 100%; max-width: 480px; }
+.squiz__prompt { font-size: var(--fs-h3); margin-bottom: var(--space-6); line-height: 1.6; text-align: center; }
+.squiz__options { display: flex; flex-direction: column; gap: var(--space-3); }
+.squiz__option {
+  padding: var(--space-5); border-radius: var(--radius-md); border: 2px solid var(--color-border);
+  background: var(--color-surface); font-size: var(--fs-body); font-weight: 600; text-align: start; cursor: pointer;
+}
+.squiz__option--selected { border-color: var(--color-primary-500); background: var(--color-primary-50); color: var(--color-primary-700); }
+[data-theme='dark'] .squiz__option--selected { background: rgba(79,95,214,0.15); }
+
+@media (max-width: 480px) {
+  .squiz__pulse { font-size: 44px; }
+  .squiz__prompt { font-size: var(--fs-h4); }
+}

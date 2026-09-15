@@ -1,0 +1,18 @@
+.lang-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: var(--fs-caption);
+  font-weight: 600;
+}
+.lang-trigger:hover { background: var(--color-surface-alt); }
+.lang-trigger__name { display: none; }
+@media (min-width: 900px) {
+  .lang-trigger__name { display: inline; }
+}

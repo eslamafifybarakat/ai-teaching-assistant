@@ -1,0 +1,88 @@
+<div class="shell" [class.shell--collapsed]="sidebarCollapsed()">
+  @if (mobileOpen()) {
+    <button
+      type="button"
+      class="shell__scrim"
+      aria-label="Close navigation"
+      (click)="closeMobile()"></button>
+  }
+
+  <aside class="shell__sidebar" [class.shell__sidebar--open]="mobileOpen()">
+    <div class="shell__logo">
+      <span class="shell__logo-icon">🎓</span>
+      @if (!sidebarCollapsed()) { <span class="shell__logo-text">{{ 'common.appName' | translate }}</span> }
+    </div>
+
+    <button type="button" class="shell__cta" (click)="startLecture()">
+      <span>✨</span>
+      @if (!sidebarCollapsed()) { <span>{{ 'nav.createLecture' | translate }}</span> }
+    </button>
+
+    <nav class="shell__nav">
+      @for (item of navItems; track item.key) {
+        <a
+          class="shell__nav-item"
+          [routerLink]="item.link"
+          routerLinkActive="shell__nav-item--active"
+          (click)="closeMobile()">
+          <span class="shell__nav-icon">{{ item.icon }}</span>
+          @if (!sidebarCollapsed()) { <span>{{ item.key | translate }}</span> }
+        </a>
+      }
+    </nav>
+
+    <button type="button" class="shell__collapse" (click)="toggleSidebar()">
+      {{ sidebarCollapsed() ? '»' : '«' }}
+    </button>
+  </aside>
+
+  <div class="shell__main">
+    <header class="shell__topbar">
+      <button type="button" class="shell__burger" (click)="toggleMobile()" aria-label="Menu">☰</button>
+
+      <div class="shell__search">
+        <span>🔍</span>
+        <input type="text" [placeholder]="'common.search' | translate" />
+      </div>
+
+      <div class="shell__topbar-actions">
+        <app-language-switcher></app-language-switcher>
+        <app-theme-toggle></app-theme-toggle>
+
+        <button type="button" class="shell__icon-btn" (click)="aiOpen.set(true)" [attr.aria-label]="'nav.aiAssistant' | translate">
+          🤖
+        </button>
+
+        <button type="button" class="shell__icon-btn" [attr.aria-label]="'common.notifications' | translate">
+          🔔
+          <span class="shell__notif-dot"></span>
+        </button>
+
+        <app-dropdown-menu align="end">
+          <button trigger type="button" class="shell__user">
+            <app-avatar [initials]="user()?.avatarInitials ?? '؟'" [color]="user()?.avatarColor ?? '#4f5fd6'" size="sm"></app-avatar>
+            @if (!sidebarCollapsed()) {
+              <span class="shell__user-info">
+                <strong>{{ user()?.name }}</strong>
+                <small>{{ ('roles.' + user()?.role) | translate }}</small>
+              </span>
+            }
+          </button>
+          <button type="button" class="dropdown-item" (click)="logout('settings')">
+            <span>⚙️</span><span>{{ 'common.settings' | translate }}</span>
+          </button>
+          <div class="dropdown-divider"></div>
+          <button type="button" class="dropdown-item dropdown-item--danger" (click)="logout('logout')">
+            <span>🚪</span><span>{{ 'common.logout' | translate }}</span>
+          </button>
+        </app-dropdown-menu>
+      </div>
+    </header>
+
+    <main class="shell__content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+
+<app-ai-chat-widget [open]="aiOpen()" (closed)="aiOpen.set(false)"></app-ai-chat-widget>

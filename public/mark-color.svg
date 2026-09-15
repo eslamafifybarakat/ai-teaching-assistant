@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="AI Teaching Assistant mark">
+  <rect width="512" height="512" rx="112" fill="#3c4bc4"/>
+  <path d="M256 104c-70.7 0-128 52.4-128 117 0 36.8 18.6 69.6 47.7 91v54.4c0 9.3 10.5 14.7 18 9.3l52-37.1c3.4.3 6.8.4 10.3.4 70.7 0 128-52.4 128-117S326.7 104 256 104Z" fill="#ffffff" opacity="0.14"/>
+  <path d="M170 292 214 176h30l44 116h-31l-8-23h-40l-8 23h-31Zm47-46h25l-12.5-36-12.5 36Z" fill="#ffffff"/>
+  <rect x="300" y="176" width="28" height="116" rx="8" fill="#ffb84d"/>
+</svg>

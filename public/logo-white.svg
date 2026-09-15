@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 96" role="img" aria-label="AI Teaching Assistant">
+  <rect x="2" y="12" width="72" height="72" rx="18" fill="#ffffff" fill-opacity="0.14" stroke="#ffffff" stroke-width="2"/>
+  <text x="38" y="61" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="800" fill="#ffffff">AI</text>
+  <text x="92" y="52" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="700" fill="#ffffff">Teaching</text>
+  <text x="92" y="78" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="500" fill="#a5b4fc">Assistant</text>
+</svg>

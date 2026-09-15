@@ -1,0 +1,6 @@
+<div class="pbar">
+  <div class="pbar__track">
+    <div class="pbar__fill" [class]="'pbar__fill--' + tone()" [style.width.%]="percent()"></div>
+  </div>
+  @if (showLabel()) { <span class="pbar__label">{{ percent() | number:'1.0-0' }}%</span> }
+</div>

@@ -1,0 +1,50 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-header__title">{{ 'questionBank.title' | translate }}</h1>
+    <p class="page-header__subtitle">{{ 'questionBank.subtitle' | translate }}</p>
+  </div>
+  <div class="page-header__actions">
+    <app-button variant="secondary">+ {{ 'questionBank.createQuestion' | translate }}</app-button>
+    <app-button variant="primary" [loading]="generating()" (pressed)="generateWithAi()">✨ {{ 'questionBank.generateWithAi' | translate }}</app-button>
+  </div>
+</div>
+
+<div class="qb-toolbar">
+  <app-search-input [placeholder]="'common.search' | translate" [value]="query()" (valueChange)="query.set($event)"></app-search-input>
+  <div class="chip-row">
+    <button type="button" class="chip" [class.chip--active]="!difficultyFilter()" (click)="difficultyFilter.set(null)">{{ 'common.all' | translate }}</button>
+    @for (d of difficulties; track d) {
+      <button type="button" class="chip" [class.chip--active]="difficultyFilter() === d" (click)="difficultyFilter.set(d)">{{ ('quiz.diff' + (d.charAt(0).toUpperCase() + d.slice(1))) | translate }}</button>
+    }
+  </div>
+</div>
+
+@if (filtered().length === 0) {
+  <app-empty-state icon="🧠" [title]="'questionBank.emptyTitle' | translate" [body]="'questionBank.emptyBody' | translate"></app-empty-state>
+} @else {
+  <div class="stack-4">
+    @for (item of filtered(); track item.id) {
+      <app-card>
+        <div class="qb-item">
+          <div class="qb-item__main">
+            <div class="chip-row" style="margin-bottom: var(--space-2)">
+              <app-badge tone="primary">{{ item.topic }}</app-badge>
+              <app-badge [tone]="difficultyTone(item.difficulty)">{{ ('quiz.diff' + (item.difficulty.charAt(0).toUpperCase() + item.difficulty.slice(1))) | translate }}</app-badge>
+              <app-badge tone="neutral">{{ item.bloomLevel }}</app-badge>
+            </div>
+            <strong>{{ item.prompt }}</strong>
+            <div class="qb-item__options text-muted">
+              @for (opt of item.options; track opt.id) {
+                <span [class.qb-item__correct]="opt.id === item.correctOptionId">{{ opt.text }}</span>
+              }
+            </div>
+          </div>
+          <div class="qb-item__stats">
+            <div><strong>{{ item.usageCount }}</strong><small>{{ 'questionBank.usageCount' | translate }}</small></div>
+            <div><strong>{{ item.successRate }}%</strong><small>{{ 'questionBank.successRate' | translate }}</small></div>
+          </div>
+        </div>
+      </app-card>
+    }
+  </div>
+}

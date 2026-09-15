@@ -1,0 +1,306 @@
+// ==========================================================================
+// Global Design Tokens — AI Teaching Assistant
+// ==========================================================================
+@use 'sass:map';
+
+:root {
+  // ---- Brand colors ----
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #4f5fd6;
+  --color-primary-600: #3c4bc4;
+  --color-primary-700: #2f3aa0;
+  --color-primary-800: #1e2560;
+  --color-primary-900: #141a45;
+
+  --color-accent-400: #ffb84d;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+
+  --color-success-50: #ecfdf5;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+
+  --color-danger-50: #fef2f2;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+
+  --color-info-50: #eff6ff;
+  --color-info-500: #3b82f6;
+
+  // ---- Semantic role tokens ----
+  // The raw `-50` / `-600` steps are tuned for a light surface: a `-50` tint is
+  // near-white and a `-600` accent is near-black, so both invert badly under
+  // [data-theme='dark']. Anything that paints a soft tinted background or
+  // colored *text* uses these role tokens instead, and the dark block below
+  // flips them once for the whole app.
+  --color-primary-tint: var(--color-primary-50);
+  --color-success-tint: var(--color-success-50);
+  --color-warning-tint: var(--color-warning-50);
+  --color-danger-tint: var(--color-danger-50);
+  --color-info-tint: var(--color-info-50);
+  --color-accent-tint: #fff4e0;
+
+  --color-primary-text: var(--color-primary-700);
+  --color-success-text: var(--color-success-600);
+  --color-warning-text: var(--color-warning-600);
+  --color-danger-text: var(--color-danger-600);
+  --color-accent-text: var(--color-accent-600);
+
+  // Solid fills that carry white label text.
+  --color-primary-solid: var(--color-primary-600);
+  --color-primary-solid-hover: var(--color-primary-700);
+  --color-on-primary: #ffffff;
+
+  // ---- Neutrals ----
+  --color-bg: #f6f7fb;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f1f2f8;
+  --color-border: #e4e6f0;
+  --color-border-strong: #d0d3e4;
+  --color-text: #1c1f33;
+  --color-text-muted: #676b85;
+  // Darkened from #9498ad, which rendered at ~2.9:1 on --color-surface and
+  // failed the WCAG AA 4.5:1 text minimum (caught by the Lighthouse
+  // color-contrast audit on the /student/join divider). Now ~5.2:1.
+  --color-text-subtle: #686c82;
+  --color-overlay: rgba(20, 22, 45, 0.5);
+
+  // ---- Elevation ----
+  --shadow-xs: 0 1px 2px rgba(20, 22, 60, 0.05);
+  --shadow-sm: 0 2px 8px rgba(20, 22, 60, 0.06);
+  --shadow-md: 0 6px 20px rgba(20, 22, 60, 0.08);
+  --shadow-lg: 0 16px 40px rgba(20, 22, 60, 0.14);
+  --shadow-focus: 0 0 0 3px rgba(79, 95, 214, 0.35);
+
+  // ---- Radius ----
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  // ---- Spacing scale ----
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  // ---- Motion ----
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --duration-slow: 320ms;
+
+  // ---- Layout ----
+  --sidebar-width: 272px;
+  --sidebar-collapsed-width: 84px;
+  --topbar-height: 68px;
+  --content-max-width: 1440px;
+
+  // ---- Typography (per-language font stacks) ----
+  --font-ar: 'IBM Plex Sans Arabic', 'Inter', system-ui, sans-serif;
+  --font-en: 'Inter', system-ui, sans-serif;
+  --font-zh: 'Noto Sans SC', 'Inter', system-ui, sans-serif;
+  --font-ru: 'Inter', 'Noto Sans', system-ui, sans-serif;
+  --font-ja: 'Noto Sans JP', 'Inter', system-ui, sans-serif;
+  --font-hi: 'Noto Sans Devanagari', 'Inter', system-ui, sans-serif;
+  --font-active: var(--font-ar);
+
+  --fs-display: 2.75rem;
+  --fs-h1: 2.25rem;
+  --fs-h2: 1.75rem;
+  --fs-h3: 1.375rem;
+  --fs-h4: 1.125rem;
+  --fs-body: 0.9375rem;
+  --fs-caption: 0.8125rem;
+  --fs-label: 0.75rem;
+
+  --z-dropdown: 200;
+  --z-sticky: 300;
+  --z-drawer: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+}
+
+[data-theme='dark'] {
+  --color-bg: #0f1120;
+  --color-surface: #171a2e;
+  --color-surface-alt: #1f2238;
+  --color-border: #2a2e4a;
+  --color-border-strong: #383d60;
+  --color-text: #eef0fb;
+  --color-text-muted: #a6abcf;
+  // Lightened from #767ba3 (~4.2:1 on the dark surface) for the same reason
+  // as its light-theme counterpart above. Now ~5.5:1.
+  --color-text-subtle: #8a8fbb;
+  --color-overlay: rgba(6, 7, 18, 0.65);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.5);
+  --shadow-focus: 0 0 0 3px rgba(129, 140, 248, 0.45);
+
+  // Tints become low-alpha washes over the dark surface rather than near-white
+  // blocks; accents move up the ramp so they clear 4.5:1 on that surface.
+  --color-primary-tint: rgba(79, 95, 214, 0.16);
+  --color-success-tint: rgba(16, 185, 129, 0.14);
+  --color-warning-tint: rgba(245, 158, 11, 0.14);
+  --color-danger-tint: rgba(239, 68, 68, 0.14);
+  --color-info-tint: rgba(59, 130, 246, 0.14);
+  --color-accent-tint: rgba(245, 158, 11, 0.18);
+
+  --color-primary-text: #a9b4ff;
+  --color-success-text: #34d399;
+  --color-warning-text: #fbbf24;
+  --color-danger-text: #f87171;
+  --color-accent-text: var(--color-accent-400);
+
+  // Lifted one step so the fill doesn't disappear into the dark surface behind
+  // it; both values still clear 4.5:1 against the white label they carry
+  // (#4f5fd6 ~6.5:1, #5f6ee0 ~5.4:1), which is why hover can't go lighter.
+  --color-primary-solid: var(--color-primary-500);
+  --color-primary-solid-hover: #5f6ee0;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html[dir='rtl'] { direction: rtl; }
+html[dir='ltr'] { direction: ltr; }
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-active);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--duration-base) var(--ease-standard), color var(--duration-base) var(--ease-standard);
+}
+
+html[lang='ar'] body { --font-active: var(--font-ar); }
+html[lang='en'] body { --font-active: var(--font-en); }
+html[lang='zh'] body { --font-active: var(--font-zh); }
+html[lang='ru'] body { --font-active: var(--font-ru); }
+html[lang='ja'] body { --font-active: var(--font-ja); }
+html[lang='hi'] body { --font-active: var(--font-hi); }
+
+h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 600; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
+
+::selection { background: var(--color-primary-200); color: var(--color-primary-900); }
+
+/* Scrollbars */
+* { scrollbar-width: thin; scrollbar-color: var(--color-border-strong) transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: var(--color-border-strong); border-radius: var(--radius-pill); }
+
+/* Focus visibility for accessibility */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-radius: var(--radius-sm);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+/* Utility for logical spacing that respects RTL/LTR automatically via flow-relative props */
+.text-muted { color: var(--color-text-muted); }
+.text-subtle { color: var(--color-text-subtle); }
+
+/* Dropdown item utility (used inside app-dropdown-menu content projection) */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: none;
+  color: var(--color-text);
+  font-size: var(--fs-body);
+  text-align: start;
+  cursor: pointer;
+}
+.dropdown-item:hover { background: var(--color-surface-alt); }
+.dropdown-item--active { color: var(--color-primary-text); font-weight: 700; background: var(--color-primary-tint); }
+.dropdown-item--danger { color: var(--color-danger-text); }
+.dropdown-divider { height: 1px; background: var(--color-border); margin: var(--space-2) 0; }
+
+/* Auth pages & shared layout utilities appended for the build */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field__label { font-size: var(--fs-caption); font-weight: 600; color: var(--color-text-muted); }
+.field__input, .field__textarea, .field__select {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 11px 14px;
+  font-size: var(--fs-body);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: inherit;
+  width: 100%;
+}
+.field__input:focus, .field__textarea:focus, .field__select:focus { outline: none; border-color: var(--color-primary-400); box-shadow: var(--shadow-focus); }
+.field__textarea { resize: vertical; min-height: 90px; }
+.checkbox { display: flex; align-items: center; gap: 8px; font-size: var(--fs-caption); color: var(--color-text-muted); cursor: pointer; }
+.link-btn { background: none; border: none; color: var(--color-primary-text); font-weight: 600; cursor: pointer; font-size: var(--fs-caption); padding: 0; }
+.link-btn:hover { text-decoration: underline; }
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); flex-wrap: wrap; }
+.page-header__title { font-size: var(--fs-h1); margin-bottom: 4px; }
+.page-header__subtitle { color: var(--color-text-muted); }
+.page-header__actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.section-title { font-size: var(--fs-h4); margin-bottom: var(--space-4); display: flex; align-items: center; justify-content: space-between; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-5); }
+@media (max-width: 1024px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; } }
+.stack-4 { display: flex; flex-direction: column; gap: var(--space-4); }
+.stack-6 { display: flex; flex-direction: column; gap: var(--space-6); }
+.chip-row { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.chip {
+  padding: 6px 14px; border-radius: var(--radius-pill); border: 1px solid var(--color-border);
+  background: var(--color-surface); color: var(--color-text-muted); font-size: var(--fs-caption); font-weight: 600; cursor: pointer;
+}
+.chip--active { background: var(--color-primary-solid); color: #fff; border-color: var(--color-primary-solid); }
+
+/* Global RTL overrides for component-scoped transforms.
+   Angular's view encapsulation rewrites `html[dir='rtl']` selectors written
+   inside a component's .scss into `html[dir='rtl'][_ngcontent-xxx]`, which can
+   never match the real <html> element (it sits outside every component's
+   template). Direction-dependent values that a component needs are instead
+   published here as custom properties, which inherit normally through
+   Angular's emulated encapsulation (it's plain attribute selectors, not real
+   Shadow DOM) — the component then just reads var(--sidebar-hidden-x). */
+html[dir='ltr'] { --sidebar-hidden-x: -100%; }
+html[dir='rtl'] { --sidebar-hidden-x: 100%; }

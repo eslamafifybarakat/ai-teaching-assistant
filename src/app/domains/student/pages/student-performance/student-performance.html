@@ -1,0 +1,60 @@
+<div class="sperf">
+  <header class="sperf__topbar">
+    <span class="sperf__brand">🎓 {{ 'common.appName' | translate }}</span>
+    <div class="chip-row">
+      <app-language-switcher></app-language-switcher>
+      <app-theme-toggle></app-theme-toggle>
+      <app-button variant="ghost" size="sm" (pressed)="logout()">{{ 'common.logout' | translate }}</app-button>
+    </div>
+  </header>
+
+  <main class="sperf__content">
+    <h1 class="page-header__title">{{ 'student.myPerformance' | translate }} — {{ auth.currentUser()?.name }}</h1>
+
+    <div class="sperf__grid">
+      <app-card>
+        <div class="sperf__score">
+          <app-donut-chart [segments]="donutSegments" [size]="150"></app-donut-chart>
+          <div class="sperf__score-label">
+            <strong>{{ overall }}%</strong>
+            <span class="text-muted">{{ 'student.overallScore' | translate }}</span>
+          </div>
+        </div>
+      </app-card>
+
+      <app-card>
+        <h3 style="margin-bottom: var(--space-4)">{{ 'student.participationRate' | translate }}</h3>
+        <div class="sperf__big-num">{{ participation }}%</div>
+        <app-progress-bar [value]="participation" tone="success"></app-progress-bar>
+      </app-card>
+
+      <app-card>
+        <h3 style="margin-bottom: var(--space-3)">{{ 'student.badgesEarned' | translate }}</h3>
+        <div class="chip-row">
+          @for (b of badges; track b) { <app-badge tone="accent">{{ b }}</app-badge> }
+        </div>
+      </app-card>
+    </div>
+
+    <section style="margin-top: var(--space-6)">
+      <h2 class="section-title">{{ 'student.byTopic' | translate }}</h2>
+      <app-card>
+        <div class="stack-4">
+          @for (t of topics; track t.name) {
+            <div>
+              <div class="weak-row__label"><span>{{ t.name }}</span><span class="text-muted">{{ t.score }}%</span></div>
+              <app-progress-bar [value]="t.score" [tone]="t.score < 60 ? 'danger' : (t.score < 80 ? 'warning' : 'success')"></app-progress-bar>
+            </div>
+          }
+        </div>
+      </app-card>
+    </section>
+
+    <section style="margin-top: var(--space-6)">
+      <h2 class="section-title">{{ 'student.recommendedReview' | translate }}</h2>
+      <app-card>
+        <p>📌 {{ 'student.reviewRecommendationText' | translate }}</p>
+      </app-card>
+    </section>
+  </main>
+</div>

@@ -1,0 +1,15 @@
+.analytics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
+.analytics-grid__wide { grid-column: 1 / -1; }
+.donut-row { display: flex; align-items: center; gap: var(--space-6); flex-wrap: wrap; }
+.donut-legend { display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--fs-caption); font-weight: 600; }
+.donut-legend__row { display: flex; align-items: center; gap: 8px; }
+.donut-legend__dot { width: 10px; height: 10px; border-radius: 50%; }
+
+.top-students { display: flex; flex-direction: column; gap: var(--space-2); }
+.top-students__row { display: grid; grid-template-columns: 40px 1fr auto; align-items: center; gap: var(--space-3); padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-surface-alt); }
+.top-students__rank { font-weight: 800; color: var(--color-primary-600); }
+.top-students__score { font-weight: 700; }
+
+@media (max-width: 900px) {
+  .analytics-grid { grid-template-columns: 1fr; }
+}

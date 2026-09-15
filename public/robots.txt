@@ -1,0 +1,8 @@
+# Dev fallback only. Every build:* script regenerates this file into
+# dist/ai-teaching-assistant/browser/ via scripts/generate-sitemap.mjs, with
+# the real SITE_URL and the authenticated-path Disallow rules — that
+# generated copy is what ships.
+User-agent: *
+Allow: /
+Disallow: /app/
+Disallow: /present/

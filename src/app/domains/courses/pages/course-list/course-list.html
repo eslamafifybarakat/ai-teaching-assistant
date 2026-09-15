@@ -1,0 +1,55 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-header__title">{{ 'courses.title' | translate }}</h1>
+    <p class="page-header__subtitle">{{ 'courses.subtitle' | translate }}</p>
+  </div>
+  <div class="page-header__actions">
+    <app-button variant="primary" (pressed)="createOpen.set(true)">+ {{ 'courses.createCourse' | translate }}</app-button>
+  </div>
+</div>
+
+<div class="course-list__toolbar">
+  <app-search-input [placeholder]="'courses.searchPlaceholder' | translate" [value]="query()" (valueChange)="query.set($event)"></app-search-input>
+</div>
+
+@if (courses().length === 0) {
+  <app-empty-state icon="📚" [title]="'courses.emptyTitle' | translate" [body]="'courses.emptyBody' | translate">
+    <app-button variant="primary" (pressed)="createOpen.set(true)">+ {{ 'courses.createCourse' | translate }}</app-button>
+  </app-empty-state>
+} @else {
+  <div class="grid-3">
+    @for (course of courses(); track course.id) {
+      <app-card [interactive]="true" (click)="openCourse(course.id)">
+        <div class="course-card">
+          <div class="course-card__top">
+            <span class="course-card__icon" [style.background]="course.color + '1a'" [style.color]="course.color">{{ course.icon }}</span>
+            <app-badge [tone]="course.status === 'active' ? 'success' : 'neutral'">{{ ('courses.status.' + course.status) | translate }}</app-badge>
+          </div>
+          <h3 class="course-card__name">{{ course.name }}</h3>
+          <p class="course-card__meta text-muted">{{ course.stage }} · {{ course.term }}</p>
+          <p class="course-card__desc text-muted">{{ course.description }}</p>
+          <div class="course-card__stats">
+            <span>👥 {{ course.studentsCount }} {{ 'courses.students' | translate }}</span>
+            <span>🗓️ {{ course.lecturesCount }} {{ 'courses.lectures' | translate }}</span>
+            <span>🎯 {{ course.avgScore }}%</span>
+          </div>
+        </div>
+      </app-card>
+    }
+  </div>
+}
+
+<app-modal [open]="createOpen()" [title]="'courses.createDialogTitle' | translate" size="sm" (closed)="createOpen.set(false)">
+  <p class="text-muted" style="margin-bottom: var(--space-5);">{{ 'courses.createDialogSubtitle' | translate }}</p>
+  <div class="stack-4">
+    <label class="field">
+      <span class="field__label">{{ 'courses.courseName' | translate }}</span>
+      <input class="field__input" type="text" [value]="newCourseName()" (input)="newCourseName.set($any($event.target).value)" />
+    </label>
+    <label class="field">
+      <span class="field__label">{{ 'courses.stage' | translate }}</span>
+      <input class="field__input" type="text" [value]="newCourseStage()" (input)="newCourseStage.set($any($event.target).value)" />
+    </label>
+    <app-button variant="primary" [fullWidth]="true" (pressed)="createCourse()">{{ 'common.create' | translate }}</app-button>
+  </div>
+</app-modal>

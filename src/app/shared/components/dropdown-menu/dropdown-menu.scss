@@ -1,0 +1,17 @@
+.dropdown { position: relative; display: inline-block; }
+.dropdown__trigger { cursor: pointer; }
+.dropdown__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  min-width: 200px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-2);
+  z-index: var(--z-dropdown);
+  animation: popIn var(--duration-fast) var(--ease-standard);
+}
+.dropdown__menu--end { inset-inline-end: 0; }
+.dropdown__menu--start { inset-inline-start: 0; }
+@keyframes popIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }

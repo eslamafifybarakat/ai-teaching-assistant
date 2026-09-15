@@ -1,0 +1,49 @@
+<div class="sjoin">
+  <div class="sjoin__topbar">
+    <span class="sjoin__brand">🎓 {{ 'common.appName' | translate }}</span>
+    <div class="chip-row">
+      <app-language-switcher></app-language-switcher>
+      <app-theme-toggle></app-theme-toggle>
+    </div>
+  </div>
+
+  <main class="sjoin__center">
+    <app-card>
+      @if (step() === 'code') {
+        <div class="sjoin__icon">📲</div>
+        <h1 class="sjoin__title">{{ 'student.joinTitle' | translate }}</h1>
+        <p class="sjoin__hint text-muted">{{ 'student.joinHint' | translate }}</p>
+
+        <label class="field" style="margin: var(--space-6) 0 var(--space-4)">
+          <span class="field__label">{{ 'student.enterCode' | translate }}</span>
+          <input class="field__input sjoin__code-input" type="text" [value]="code()" (input)="code.set($any($event.target).value)" placeholder="TB-XXXX" />
+        </label>
+
+        <app-button variant="primary" size="lg" [fullWidth]="true" (pressed)="submitCode()">{{ 'student.joinNow' | translate }}</app-button>
+
+        <div class="sjoin__divider"><span>{{ 'auth.orDivider' | translate }}</span></div>
+
+        <app-button variant="secondary" size="lg" [fullWidth]="true" [loading]="scanning()" (pressed)="simulateScan()">
+          📷 {{ 'student.scanQr' | translate }}
+        </app-button>
+      } @else {
+        <div class="sjoin__icon">✅</div>
+        <h1 class="sjoin__title">{{ code() }}</h1>
+        <p class="sjoin__hint text-muted">{{ 'student.joinTitle' | translate }}</p>
+
+        <div class="stack-4" style="margin: var(--space-6) 0">
+          <label class="field">
+            <span class="field__label">{{ 'student.yourName' | translate }}</span>
+            <input class="field__input" type="text" [value]="name()" (input)="name.set($any($event.target).value)" placeholder="يوسف كريم" />
+          </label>
+          <label class="field">
+            <span class="field__label">{{ 'student.studentId' | translate }}</span>
+            <input class="field__input" type="text" [value]="studentId()" (input)="studentId.set($any($event.target).value)" placeholder="20261005" />
+          </label>
+        </div>
+
+        <app-button variant="primary" size="lg" [fullWidth]="true" (pressed)="join()">{{ 'student.joinNow' | translate }} 🚀</app-button>
+      }
+    </app-card>
+  </main>
+</div>

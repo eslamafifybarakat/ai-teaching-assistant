@@ -1,0 +1,12 @@
+<app-card>
+  <div class="stat">
+    <div class="stat__icon" [style.background]="tint() + '1a'" [style.color]="tint()">{{ icon() }}</div>
+    <div class="stat__body">
+      <span class="stat__label">{{ label() }}</span>
+      <span class="stat__value">{{ value() }}</span>
+      @if (trend()) {
+        <span class="stat__trend" [class.stat__trend--down]="!trendPositive()">{{ trend() }}</span>
+      }
+    </div>
+  </div>
+</app-card>

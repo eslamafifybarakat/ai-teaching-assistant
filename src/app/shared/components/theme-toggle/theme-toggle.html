@@ -1,0 +1,3 @@
+<button type="button" class="theme-toggle" (click)="theme.toggle()" [attr.aria-label]="'common.darkMode' | translate">
+  @if (theme.mode() === 'dark') { <span>☀️</span> } @else { <span>🌙</span> }
+</button>

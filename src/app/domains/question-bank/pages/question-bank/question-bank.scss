@@ -1,0 +1,15 @@
+.qb-toolbar { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; margin-bottom: var(--space-6); }
+.qb-toolbar app-search-input { max-width: 320px; flex: 1; }
+
+.qb-item { display: flex; justify-content: space-between; gap: var(--space-5); flex-wrap: wrap; }
+.qb-item__main { flex: 1; min-width: 240px; }
+.qb-item__options { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-3); font-size: var(--fs-caption); }
+.qb-item__correct { color: var(--color-success-600); font-weight: 700; }
+.qb-item__stats { display: flex; gap: var(--space-6); flex-shrink: 0; }
+.qb-item__stats div { text-align: center; }
+.qb-item__stats strong { display: block; font-size: var(--fs-h4); }
+.qb-item__stats small { color: var(--color-text-muted); font-size: var(--fs-label); }
+
+@media (max-width: 640px) {
+  .qb-item__stats { gap: var(--space-4); width: 100%; justify-content: space-around; border-top: 1px solid var(--color-border); padding-top: var(--space-3); }
+}

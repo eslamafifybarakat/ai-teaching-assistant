@@ -1,0 +1,121 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-header__title">🧠 {{ 'quiz.generateQuestion' | translate }}</h1>
+    <p class="page-header__subtitle">{{ 'quiz.newQuestionEachTime' | translate }}</p>
+  </div>
+  <div class="page-header__actions">
+    <app-button variant="secondary" (pressed)="router.navigateByUrl('/present/' + lectureId)">← {{ 'common.back' | translate }}</app-button>
+  </div>
+</div>
+
+<div class="quiz-layout">
+  <aside class="stack-4">
+    <app-card>
+      <h3 style="margin-bottom: var(--space-4)">{{ 'quiz.generateQuestion' | translate }}</h3>
+
+      <!-- These are chip-button groups, not single form controls, so they are
+           labelled groups rather than <label>s — a <label> can only name one
+           control, and wrapping a set of buttons in one names none of them. -->
+      <div class="field" role="group" [attr.aria-label]="'quiz.topic' | translate">
+        <span class="field__label">{{ 'quiz.topic' | translate }}</span>
+        <div class="chip-row">
+          @for (t of topics; track t) {
+            <button type="button" class="chip" [class.chip--active]="topic() === t" (click)="topic.set(t)">{{ t }}</button>
+          }
+        </div>
+      </div>
+
+      <div class="field" style="margin-top: var(--space-4)" role="group" [attr.aria-label]="'quiz.questionType' | translate">
+        <span class="field__label">{{ 'quiz.questionType' | translate }}</span>
+        <div class="chip-row">
+          <button type="button" class="chip" [class.chip--active]="qType() === 'typeMcq'" (click)="qType.set('typeMcq')">{{ 'quiz.typeMcq' | translate }}</button>
+          <button type="button" class="chip" [class.chip--active]="qType() === 'typeTrueFalse'" (click)="qType.set('typeTrueFalse')">{{ 'quiz.typeTrueFalse' | translate }}</button>
+          <button type="button" class="chip" [class.chip--active]="qType() === 'typeMultiSelect'" (click)="qType.set('typeMultiSelect')">{{ 'quiz.typeMultiSelect' | translate }}</button>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top: var(--space-4)" role="group" [attr.aria-label]="'quiz.difficulty' | translate">
+        <span class="field__label">{{ 'quiz.difficulty' | translate }}</span>
+        <div class="chip-row">
+          <button type="button" class="chip" [class.chip--active]="difficulty() === 'diffEasy'" (click)="difficulty.set('diffEasy')">🟢 {{ 'quiz.diffEasy' | translate }}</button>
+          <button type="button" class="chip" [class.chip--active]="difficulty() === 'diffMedium'" (click)="difficulty.set('diffMedium')">🟡 {{ 'quiz.diffMedium' | translate }}</button>
+          <button type="button" class="chip" [class.chip--active]="difficulty() === 'diffHard'" (click)="difficulty.set('diffHard')">🔴 {{ 'quiz.diffHard' | translate }}</button>
+        </div>
+      </div>
+
+      <app-button variant="primary" [fullWidth]="true" size="lg" style="margin-top: var(--space-6)" (pressed)="generateQuestion()">
+        ✨ {{ 'quiz.generateQuestion' | translate }}
+      </app-button>
+    </app-card>
+
+    <app-card>
+      <h3 style="margin-bottom: var(--space-3)">{{ 'analytics.weakConcepts' | translate }}</h3>
+      <app-bar-chart [data]="weakConcepts" suffix="%"></app-bar-chart>
+    </app-card>
+  </aside>
+
+  <section>
+    @if (!question()) {
+      <app-card>
+        <div class="quiz-empty">
+          <span>🎯</span>
+          <p class="text-muted">{{ 'quiz.emptyHint' | translate }}</p>
+        </div>
+      </app-card>
+    } @else {
+      <app-card>
+        <div class="quiz-live-header">
+          <div class="chip-row">
+            <app-badge tone="primary">{{ question()!.topic }}</app-badge>
+            @if (live()) { <app-badge tone="success" [dot]="true">{{ 'quiz.liveBadge' | translate }}</app-badge> }
+          </div>
+          <div class="quiz-join">
+            <span>{{ 'quiz.joinCode' | translate }}: <strong>{{ joinCode() }}</strong></span>
+          </div>
+        </div>
+
+        <h2 class="quiz-prompt">{{ question()!.prompt }}</h2>
+
+        <div class="quiz-options">
+          @for (opt of question()!.options; track opt.id) {
+            <div class="quiz-option" [class.quiz-option--correct]="revealAnswer() && opt.correct">
+              <span class="quiz-option__label">{{ opt.text }}</span>
+              @if (revealAnswer() && opt.correct) { <span class="quiz-option__check">✓</span> }
+            </div>
+          }
+        </div>
+
+        <div class="quiz-actions">
+          <app-button variant="secondary" (pressed)="toggleReveal()">
+            {{ (revealAnswer() ? '👁️‍🗨️ ' : '👁️ ') }}{{ (revealAnswer() ? 'quiz.hideAnswer' : 'quiz.showAnswer') | translate }}
+          </app-button>
+          @if (live()) {
+            <app-button variant="danger" (pressed)="closeQuestion()">{{ 'quiz.closeQuestion' | translate }}</app-button>
+          }
+          <app-button variant="ghost" (pressed)="saveToBank()">💾 {{ 'questionBank.title' | translate }}</app-button>
+        </div>
+      </app-card>
+
+      <app-card style="margin-top: var(--space-5)">
+        <div class="quiz-results-header">
+          <h3>{{ 'quiz.liveResults' | translate }}</h3>
+          <span class="text-muted">{{ 'quiz.responsesReceived' | translate:{ count: responseCount() } }}</span>
+        </div>
+        <app-bar-chart [data]="barData()" [maxValue]="40" suffix=""></app-bar-chart>
+
+        @if (responseCount() > 5) {
+          <div class="quiz-insight" [class.quiz-insight--warning]="correctPercent() < 60">
+            @if (correctPercent() >= 60) {
+              <span>✅ {{ correctPercent() }}% {{ 'quiz.correctPercent' | translate }} — {{ 'quiz.mostUnderstand' | translate }}</span>
+            } @else {
+              <span>⚠️ {{ 'quiz.weakConceptDetected' | translate }} — {{ correctPercent() }}% {{ 'quiz.correctPercent' | translate }} {{ 'quiz.onlyReviewSuggested' | translate }}</span>
+            }
+          </div>
+          @if (correctPercent() < 60) {
+            <app-button variant="accent" style="margin-top: var(--space-3)">💡 {{ 'quiz.generateExplanation' | translate }}</app-button>
+          }
+        }
+      </app-card>
+    }
+  </section>
+</div>

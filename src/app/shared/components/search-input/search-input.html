@@ -1,0 +1,9 @@
+<div class="search">
+  <span class="search__icon" aria-hidden="true">🔍</span>
+  <input
+    class="search__field"
+    type="text"
+    [placeholder]="placeholder()"
+    [ngModel]="value()"
+    (ngModelChange)="valueChange.emit($event)" />
+</div>

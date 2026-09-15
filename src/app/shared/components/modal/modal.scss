@@ -1,0 +1,63 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  z-index: var(--z-modal);
+  animation: fadeIn var(--duration-base) var(--ease-standard);
+}
+// The dimmed veil is its own element (a focusable <button>) sitting behind
+// the dialog rather than wrapping it — see the comment in modal.html.
+.modal-backdrop__veil {
+  position: absolute;
+  inset: 0;
+  border: none;
+  padding: 0;
+  background: var(--color-overlay);
+  cursor: pointer;
+}
+.modal-backdrop__veil:focus-visible {
+  outline: 2px solid var(--color-surface);
+  outline-offset: -4px;
+}
+.modal {
+  position: relative;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: popIn var(--duration-base) var(--ease-standard);
+}
+.modal--sm { max-width: 420px; }
+.modal--md { max-width: 620px; }
+.modal--lg { max-width: 880px; }
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+.modal__title { font-size: var(--fs-h4); }
+.modal__close {
+  border: none; background: var(--color-surface-alt); color: var(--color-text-muted);
+  width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal__close:hover { background: var(--color-border); color: var(--color-text); }
+.modal__body { padding: var(--space-6); overflow-y: auto; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { opacity: 0; transform: scale(0.96) translateY(8px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 600px) {
+  .modal-backdrop { padding: 0; align-items: flex-end; }
+  .modal { max-width: 100%; border-radius: var(--radius-xl) var(--radius-xl) 0 0; max-height: 92vh; }
+}

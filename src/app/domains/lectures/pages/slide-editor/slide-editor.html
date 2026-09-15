@@ -1,0 +1,84 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-header__title">{{ 'slides.slideEditor' | translate }}</h1>
+  </div>
+  <div class="page-header__actions">
+    <app-button variant="secondary" (pressed)="router.navigateByUrl('/app/courses/course-db')">{{ 'common.back' | translate }}</app-button>
+    <app-button variant="primary" (pressed)="startPresentation()">▶ {{ 'slides.startPresentation' | translate }}</app-button>
+  </div>
+</div>
+
+<div class="editor-layout">
+  <aside class="editor-list">
+    <div class="editor-list__header">
+      <span>{{ 'slides.slideList' | translate }}</span>
+      <button type="button" class="icon-btn" (click)="addSlide()" title="{{ 'slides.addSlide' | translate }}">+</button>
+    </div>
+    <div class="editor-list__items">
+      @for (slide of slides(); track slide.id; let i = $index) {
+        <button type="button" class="editor-thumb" [class.editor-thumb--active]="i === activeIndex()" (click)="select(i)">
+          <span class="editor-thumb__num">{{ i + 1 }}</span>
+          <span class="editor-thumb__title">{{ slide.title }}</span>
+          @if (slide.aiGenerated) { <span class="editor-thumb__ai">✨</span> }
+        </button>
+      }
+    </div>
+  </aside>
+
+  <section class="editor-main">
+    @if (activeSlide(); as slide) {
+      <app-card [aiGenerated]="slide.aiGenerated">
+        <div class="editor-toolbar">
+          <div class="chip-row">
+            <button type="button" class="icon-btn" (click)="moveSlide(-1)" [title]="'slides.moveUp' | translate">↑</button>
+            <button type="button" class="icon-btn" (click)="moveSlide(1)" [title]="'slides.moveDown' | translate">↓</button>
+            <button type="button" class="icon-btn" (click)="duplicateSlide()" [title]="'slides.duplicateSlide' | translate">⧉</button>
+            <button type="button" class="icon-btn" (click)="deleteSlide()" [title]="'slides.deleteSlide' | translate">🗑</button>
+          </div>
+          @if (slide.aiGenerated) { <app-ai-badge></app-ai-badge> }
+        </div>
+
+        <label class="field">
+          <span class="field__label">{{ 'slides.slideTitle' | translate }}</span>
+          <input class="field__input slide-title-input" type="text" [value]="slide.title" (input)="updateTitle($any($event.target).value)" />
+        </label>
+
+        <label class="field" style="margin-top: var(--space-4)">
+          <span class="field__label">{{ 'slides.slideContent' | translate }}</span>
+          <textarea class="field__textarea slide-content-input" rows="6" [value]="slide.content" (input)="updateContent($any($event.target).value)"></textarea>
+        </label>
+
+        <label class="field" style="margin-top: var(--space-4)">
+          <span class="field__label">📝 {{ 'slides.speakerNotes' | translate }} <small class="text-muted">({{ 'slides.speakerNotesHint' | translate }})</small></span>
+          <textarea class="field__textarea" rows="3" [value]="slide.speakerNotes" (input)="updateNotes($any($event.target).value)"></textarea>
+        </label>
+      </app-card>
+
+      <app-card style="margin-top: var(--space-5)">
+        <h3 style="margin-bottom: var(--space-4)">✨ {{ 'slides.aiSuggestions' | translate }}</h3>
+        <div class="ai-actions">
+          <button type="button" class="ai-action" [class.ai-action--loading]="aiWorking() === 'simplify'" (click)="runAiAction('simplify')">🔽 {{ 'slides.simplify' | translate }}</button>
+          <button type="button" class="ai-action" [class.ai-action--loading]="aiWorking() === 'expand'" (click)="runAiAction('expand')">🔼 {{ 'slides.expand' | translate }}</button>
+          <button type="button" class="ai-action" [class.ai-action--loading]="aiWorking() === 'addExample'" (click)="runAiAction('addExample')">💡 {{ 'slides.addExample' | translate }}</button>
+          <button type="button" class="ai-action" [class.ai-action--loading]="aiWorking() === 'addDiagram'" (click)="runAiAction('addDiagram')">📊 {{ 'slides.addDiagram' | translate }}</button>
+          <button type="button" class="ai-action" [class.ai-action--loading]="aiWorking() === 'addStatistic'" (click)="runAiAction('addStatistic')">📈 {{ 'slides.addStatistic' | translate }}</button>
+          <button type="button" class="ai-action" [class.ai-action--loading]="aiWorking() === 'addQuestion'" (click)="runAiAction('addQuestion')">❓ {{ 'slides.addQuestion' | translate }}</button>
+          <button type="button" class="ai-action">🌐 {{ 'slides.translate' | translate }}</button>
+          <button type="button" class="ai-action">🎚️ {{ 'slides.changeDifficulty' | translate }}</button>
+        </div>
+      </app-card>
+
+      <div class="grid-3" style="margin-top: var(--space-5)">
+        <app-card [interactive]="true">
+          <div class="resource-card">🔎 <strong>{{ 'slides.externalExamples' | translate }}</strong></div>
+        </app-card>
+        <app-card [interactive]="true">
+          <div class="resource-card">🎥 <strong>{{ 'slides.videoFinder' | translate }}</strong></div>
+        </app-card>
+        <app-card [interactive]="true">
+          <div class="resource-card">🖼️ <strong>{{ 'slides.diagramFinder' | translate }}</strong></div>
+        </app-card>
+      </div>
+    }
+  </section>
+</div>

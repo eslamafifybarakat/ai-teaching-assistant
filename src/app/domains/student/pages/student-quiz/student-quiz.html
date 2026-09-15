@@ -1,0 +1,42 @@
+<div class="squiz">
+  @switch (phase()) {
+    @case ('waiting') {
+      <div class="squiz__center">
+        <div class="squiz__pulse">⏳</div>
+        <h1>{{ 'student.waitingTitle' | translate }}</h1>
+        <p class="text-muted">{{ 'student.waitingHint' | translate }}</p>
+      </div>
+    }
+    @case ('question') {
+      <div class="squiz__question">
+        <app-card>
+          <h2 class="squiz__prompt">{{ question.prompt }}</h2>
+          <div class="squiz__options">
+            @for (opt of question.options; track opt.id) {
+              <button type="button" class="squiz__option" [class.squiz__option--selected]="selected() === opt.id" (click)="select(opt.id)">
+                {{ opt.text }}
+              </button>
+            }
+          </div>
+          <app-button variant="primary" size="lg" [fullWidth]="true" [disabled]="!selected()" (pressed)="submit()" style="margin-top: var(--space-6)">
+            {{ 'student.submitAnswer' | translate }}
+          </app-button>
+        </app-card>
+      </div>
+    }
+    @case ('submitted') {
+      <div class="squiz__center">
+        <div class="squiz__pulse">📨</div>
+        <h1>{{ 'student.answerSubmitted' | translate }}</h1>
+        <p class="text-muted">{{ 'student.waitingForOthers' | translate }}</p>
+      </div>
+    }
+    @case ('feedback') {
+      <div class="squiz__center">
+        <div class="squiz__pulse">{{ wasCorrect() ? '🎉' : '💪' }}</div>
+        <h1>{{ (wasCorrect() ? 'student.correctFeedback' : 'student.incorrectFeedback') | translate }}</h1>
+        <app-button variant="primary" size="lg" (pressed)="goToPerformance()" style="margin-top: var(--space-6)">{{ 'student.myPerformance' | translate }} →</app-button>
+      </div>
+    }
+  }
+</div>

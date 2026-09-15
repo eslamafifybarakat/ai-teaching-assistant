@@ -1,0 +1,41 @@
+@if (open()) {
+  <div class="ai-widget">
+    <header class="ai-widget__header">
+      <span class="ai-widget__title">🤖 {{ 'aiAssistant.title' | translate }}</span>
+      <button type="button" class="ai-widget__close" (click)="closed.emit()" aria-label="Close">✕</button>
+    </header>
+
+    <div class="ai-widget__body">
+      @if (messages().length === 0) {
+        <p class="ai-widget__hint">{{ 'aiAssistant.suggestionsTitle' | translate }}</p>
+        <div class="ai-widget__suggestions">
+          @for (key of suggestionKeys; track key) {
+            <button type="button" class="ai-widget__chip" (click)="useSuggestion(key)">
+              {{ ('aiAssistant.' + key) | translate }}
+            </button>
+          }
+        </div>
+      }
+      @for (msg of messages(); track msg.id) {
+        <div class="ai-widget__msg" [class.ai-widget__msg--user]="msg.role === 'user'">
+          {{ msg.text }}
+        </div>
+      }
+      @if (thinking()) {
+        <div class="ai-widget__msg ai-widget__msg--thinking">{{ 'aiAssistant.thinking' | translate }}</div>
+      }
+    </div>
+
+    <footer class="ai-widget__footer">
+      <input
+        class="ai-widget__input"
+        type="text"
+        [placeholder]="'aiAssistant.placeholder' | translate"
+        [ngModel]="draft()"
+        (ngModelChange)="draft.set($event)"
+        (keydown.enter)="send()" />
+      <button type="button" class="ai-widget__send" (click)="send()" aria-label="Send">➤</button>
+    </footer>
+    <p class="ai-widget__powered">{{ 'aiAssistant.poweredBy' | translate }}</p>
+  </div>
+}
