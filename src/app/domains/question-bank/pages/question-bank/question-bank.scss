@@ -4,7 +4,7 @@
 .qb-item { display: flex; justify-content: space-between; gap: var(--space-5); flex-wrap: wrap; }
 .qb-item__main { flex: 1; min-width: 240px; }
 .qb-item__options { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-3); font-size: var(--fs-caption); }
-.qb-item__correct { color: var(--color-success-600); font-weight: 700; }
+.qb-item__correct { color: var(--color-success-text); font-weight: 700; }
 .qb-item__stats { display: flex; gap: var(--space-6); flex-shrink: 0; }
 .qb-item__stats div { text-align: center; }
 .qb-item__stats strong { display: block; font-size: var(--fs-h4); }

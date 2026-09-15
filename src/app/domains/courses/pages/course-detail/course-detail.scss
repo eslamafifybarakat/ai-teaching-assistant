@@ -6,7 +6,7 @@
 .ov-stat strong { font-size: var(--fs-h2); }
 .ov-stat small { color: var(--color-text-muted); }
 .lec-item { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
-.lec-item__score { color: var(--color-primary-600); font-size: var(--fs-h4); }
+.lec-item__score { color: var(--color-primary-text); font-size: var(--fs-h4); }
 .student-table { display: flex; flex-direction: column; }
 .student-row {
   display: grid; grid-template-columns: auto 1fr auto 160px auto;

@@ -1,5 +1,4 @@
-.sjoin { min-height: 100vh; background: radial-gradient(circle at 50% 0%, var(--color-primary-50), var(--color-bg) 60%); display: flex; flex-direction: column; }
-[data-theme='dark'] .sjoin { background: radial-gradient(circle at 50% 0%, rgba(79,95,214,0.12), var(--color-bg) 60%); }
+.sjoin { min-height: 100vh; background: radial-gradient(circle at 50% 0%, var(--color-primary-tint), var(--color-bg) 60%); display: flex; flex-direction: column; }
 .sjoin__topbar { display: flex; align-items: center; justify-content: space-between; padding: var(--space-5) var(--space-6); }
 .sjoin__brand { font-weight: 700; }
 .sjoin__center { flex: 1; display: flex; align-items: center; justify-content: center; padding: var(--space-6); }

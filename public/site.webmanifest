@@ -1,10 +1,23 @@
 {
+  "id": "/",
   "name": "AI Teaching Assistant",
   "short_name": "AI Teach",
   "description": "Plan lectures, run live quizzes, and track how every student is doing.",
+  "lang": "ar",
+  "dir": "rtl",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui",
+    "browser"
+  ],
+  "orientation": "any",
+  "categories": [
+    "education",
+    "productivity"
+  ],
   "background_color": "#f6f7fb",
   "theme_color": "#3c4bc4",
   "icons": [

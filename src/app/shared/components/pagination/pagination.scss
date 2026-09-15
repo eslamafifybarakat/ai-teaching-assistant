@@ -7,4 +7,4 @@
 }
 .pagination__btn:hover:not(:disabled) { background: var(--color-surface-alt); }
 .pagination__btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.pagination__btn--active { background: var(--color-primary-600); color: white; border-color: var(--color-primary-600); }
+.pagination__btn--active { background: var(--color-primary-solid); color: #fff; border-color: var(--color-primary-solid); }

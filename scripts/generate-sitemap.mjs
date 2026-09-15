@@ -11,7 +11,15 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { PUBLIC_ROUTES, PRIVATE_PATH_PREFIXES } from './routes.mjs';
 
-const SITE_URL = process.env.SITE_URL ?? 'https://example.com';
+// Resolution order: an explicit SITE_URL wins; on Vercel the project's own
+// production hostname is authoritative (and stays correct if the domain
+// changes); locally, fall back to the deployed production URL so a local
+// build emits the same sitemap CI would.
+const SITE_URL =
+  process.env.SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : 'https://ai-teaching-assistant-hazel.vercel.app');
 const root = path.dirname(fileURLToPath(import.meta.url));
 const browserDir = process.env.LH_BROWSER_DIR
   ? path.resolve(process.env.LH_BROWSER_DIR)

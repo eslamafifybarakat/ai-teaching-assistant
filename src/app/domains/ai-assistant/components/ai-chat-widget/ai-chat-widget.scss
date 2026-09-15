@@ -42,13 +42,13 @@
   align-self: flex-start;
   line-height: 1.6;
 }
-.ai-widget__msg--user { align-self: flex-end; background: var(--color-primary-600); color: white; }
+.ai-widget__msg--user { align-self: flex-end; background: var(--color-primary-solid); color: #fff; }
 .ai-widget__msg--thinking { opacity: 0.6; font-style: italic; }
 
 .ai-widget__footer { display: flex; gap: 8px; padding: var(--space-3) var(--space-4); border-top: 1px solid var(--color-border); }
 .ai-widget__input { flex: 1; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 9px 12px; background: var(--color-surface); color: var(--color-text); font-size: var(--fs-caption); }
 .ai-widget__input:focus { outline: none; border-color: var(--color-primary-400); }
-.ai-widget__send { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--color-primary-600); color: white; cursor: pointer; }
+.ai-widget__send { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--color-primary-solid); color: #fff; cursor: pointer; }
 
 .ai-widget__powered { font-size: 10px; text-align: center; color: var(--color-text-subtle); padding-bottom: var(--space-2); }
 

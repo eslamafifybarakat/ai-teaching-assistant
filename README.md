@@ -1,5 +1,12 @@
 # 🎓 AI Teaching Assistant — Interactive UI/UX Prototype
 
+[![CI](https://github.com/eslamafifybarakat/ai-teaching-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/eslamafifybarakat/ai-teaching-assistant/actions/workflows/ci.yml)
+[![Angular](https://img.shields.io/badge/Angular-22-dd0031?logo=angular&logoColor=white)](https://angular.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+**Live demo → https://ai-teaching-assistant-hazel.vercel.app**
+
 A fully interactive Angular 22 prototype of an AI-powered university/school
 teaching platform: upload material → AI analysis → generate slides → present
 → run live quizzes → analyze weak concepts → reports. Six languages, full
@@ -156,7 +163,7 @@ TESTS                 PASS   (6 test files, 20 tests)
 SERVICE WORKER        PASS   (ngsw.json + ngsw-worker.js present in production output)
 STATIC SERVE          PASS   (/, /auth/login, /student/join, /app/dashboard, /sitemap.xml, /robots.txt -> 200)
 CSP HASH REWRITE      PASS   (verified end-to-end: vercel.json script-src rewritten to the real build's hashes)
-VERCEL                CONFIGURED, NOT DEPLOYED
+VERCEL                DEPLOYED   (https://ai-teaching-assistant-hazel.vercel.app — / /auth/login /student/join -> 200)
 CI                    CONFIGURED, NOT RUN on a real runner
 ```
 
@@ -209,8 +216,13 @@ Three real defects were found by this tooling and fixed:
   are a plain "AI" monogram created so the icon/OG generators had real source
   material to render from and could be verified end-to-end. Swap them for
   real brand assets and re-run `npm run generate:icons && npm run generate:og`.
-- **`siteUrl` is `https://example.com`** in every environment file — set the
-  real domains before deploying, since the sitemap is built from it.
+- **Only production is actually deployed.** `siteUrl` in
+  `environment.staging.ts`/`.uat.ts`/`.dev.ts` points at the Vercel
+  *branch alias* those branches would get (`…-git-<branch>-….vercel.app`);
+  no such branch exists yet, so those URLs are predicted, not verified.
+  `generate-sitemap.mjs` reads `SITE_URL`, falling back to Vercel's own
+  `VERCEL_PROJECT_PRODUCTION_URL` — so the sitemap follows the real domain
+  if it ever changes.
 
 - No real backend — state resets on refresh (by design, per spec).
 - Course/lecture mock **content** (student names, course titles, quiz
